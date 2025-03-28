@@ -1,15 +1,88 @@
-import "./App.css";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import MediaPlayerCustom from "./components/MediaPlayerCustom";
+import EventsList from "./components/EventsList";
+import { fetchEventsRequest } from "./store/actions/analyticsActions";
+import {
+  selectEvents,
+  selectLoading,
+  selectError,
+} from "./store/selectors/analytics";
+import {
+  selectCurrentTime,
+  selectIsPlaying,
+  selectCurrentEvent,
+  selectShowRectangle,
+} from "./store/selectors/player";
+import {
+  setCurrentTime,
+  togglePlaying,
+  setCurrentEvent,
+} from "./store/actions/playerActions";
+import { FormattedEvent } from "./types/types";
 
-function App() {
-  const SRC =
-    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
-  const TITLE = "Big Buck Bunny";
+const VIDEO_URL =
+  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
+const App: React.FC = () => {
+  const dispatch = useDispatch();
+  const events = useSelector(selectEvents);
+  const loading = useSelector(selectLoading);
+  const error = useSelector(selectError);
+  const currentTime = useSelector(selectCurrentTime);
+  const currentEvent = useSelector(selectCurrentEvent);
+  const showRectangle = useSelector(selectShowRectangle);
+  const isPlaying = useSelector(selectIsPlaying);
+
+  useEffect(() => {
+    dispatch(fetchEventsRequest());
+  }, [dispatch]);
+
+  // Обработка клика по событию
+  const handleEventClick = (event: FormattedEvent) => {
+    dispatch(setCurrentEvent(event));
+    dispatch(togglePlaying(false)); // Останавливаем воспроизведение при клике на событие
+  };
+
+  // Обработка обновления времени
+  const handleTimeUpdate = (time: number) => {
+    dispatch(setCurrentTime(time));
+  };
+
+  // Обработка паузы / воспроизведения
+  const handlePlayPause = useCallback(() => {
+    dispatch(togglePlaying(!isPlaying)); // Переключение состояния воспроизведения
+  }, [dispatch, isPlaying]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
-    <>
-      <MediaPlayerCustom src={SRC} title={TITLE} />
-    </>
+    <div className="app">
+      <h1>Video Analytics Player</h1>
+      <div className="player-container">
+        <MediaPlayerCustom
+          src={VIDEO_URL}
+          currentTime={currentTime}
+          currentEvent={currentEvent}
+          showRectangle={showRectangle}
+          onTimeUpdate={handleTimeUpdate}
+          onPlayPause={handlePlayPause}
+          isPlaying={isPlaying}
+        />
+        <EventsList
+          events={events}
+          onEventClick={handleEventClick}
+          currentTime={currentTime}
+        />
+      </div>
+    </div>
   );
-}
+};
 
 export default App;
