@@ -1,12 +1,13 @@
-import { call, put, takeLatest } from "redux-saga/effects";
-import { AnalyticsEvent, FormattedEvent } from "../../types/types";
+import { put, takeLatest } from "redux-saga/effects";
+import { FormattedEvent } from "../../types/types";
 import { FETCH_EVENTS_REQUEST } from "../constants";
 import {
   fetchEventsFailure,
   fetchEventsSuccess,
 } from "../actions/analyticsActions";
+import { data } from "../../data";
 
-const EVENTS_API_URL = "https://jsonkeeper.com/b/7T9N";
+// const EVENTS_API_URL = "https://jsonkeeper.com/b/7T9N";
 
 const formatTime = (ms: number): string => {
   const minutes = Math.floor(ms / 60000)
@@ -39,12 +40,12 @@ function* fetchEventsSaga() {
       yield put(fetchEventsSuccess(localStorageEvents));
     } else {
       // Если данных нет в localStorage, делаем запрос к API
-      const response: Response = yield call(fetch, EVENTS_API_URL);
-      if (!response.ok) {
-        throw new Error("Failed to fetch events");
-      }
-      const data: AnalyticsEvent[] = yield response.json();
-      console.log(data);
+      //   const response: Response = yield call(fetch, EVENTS_API_URL);
+      //   if (!response.ok) {
+      //     throw new Error("Failed to fetch events");
+      //   }
+      //   const data: AnalyticsEvent[] = data;
+      //   console.log(data);
 
       const formattedEvents: FormattedEvent[] = data.map((event, index) => ({
         ...event,

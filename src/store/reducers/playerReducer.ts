@@ -2,10 +2,11 @@ import { PlayerState } from "../../types/types";
 import { PlayerActions } from "../actions/playerActions";
 import {
   SET_CURRENT_TIME,
-  TOGGLE_PLAYING,
   SET_CURRENT_EVENT,
   SHOW_RECTANGLE,
   HIDE_RECTANGLE,
+  PLAY_VIDEO,
+  PAUSE_VIDEO,
 } from "../constants";
 
 const initialState: PlayerState = {
@@ -24,16 +25,22 @@ const playerReducer = (
       return {
         ...state,
         currentTime: action.payload,
-      };
-    case TOGGLE_PLAYING:
-      return {
-        ...state,
-        isPlaying: action.payload,
+        isPlaying: false,
       };
     case SET_CURRENT_EVENT:
       return {
         ...state,
         currentEvent: action.payload,
+      };
+    case PLAY_VIDEO:
+      return {
+        ...state,
+        isPlaying: true,
+      };
+    case PAUSE_VIDEO:
+      return {
+        ...state,
+        isPlaying: false,
       };
     case SHOW_RECTANGLE:
       return {

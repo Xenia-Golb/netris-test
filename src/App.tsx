@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MediaPlayerCustom from "./components/MediaPlayerCustom";
 import EventsList from "./components/EventsList";
@@ -14,11 +14,7 @@ import {
   selectCurrentEvent,
   selectShowRectangle,
 } from "./store/selectors/player";
-import {
-  setCurrentTime,
-  togglePlaying,
-  setCurrentEvent,
-} from "./store/actions/playerActions";
+import { setCurrentTime, setCurrentEvent } from "./store/actions/playerActions";
 import { FormattedEvent } from "./types/types";
 
 const VIDEO_URL =
@@ -32,27 +28,19 @@ const App: React.FC = () => {
   const currentTime = useSelector(selectCurrentTime);
   const currentEvent = useSelector(selectCurrentEvent);
   const showRectangle = useSelector(selectShowRectangle);
-  const isPlaying = useSelector(selectIsPlaying);
 
   useEffect(() => {
     dispatch(fetchEventsRequest());
   }, [dispatch]);
 
-  // Обработка клика по событию
   const handleEventClick = (event: FormattedEvent) => {
+    dispatch(setCurrentTime(event.timestamp));
     dispatch(setCurrentEvent(event));
-    dispatch(togglePlaying(false)); // Останавливаем воспроизведение при клике на событие
   };
 
-  // Обработка обновления времени
   const handleTimeUpdate = (time: number) => {
     dispatch(setCurrentTime(time));
   };
-
-  // Обработка паузы / воспроизведения
-  const handlePlayPause = useCallback(() => {
-    dispatch(togglePlaying(!isPlaying)); // Переключение состояния воспроизведения
-  }, [dispatch, isPlaying]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -72,8 +60,8 @@ const App: React.FC = () => {
           currentEvent={currentEvent}
           showRectangle={showRectangle}
           onTimeUpdate={handleTimeUpdate}
-          onPlayPause={handlePlayPause}
-          isPlaying={isPlaying}
+          handlePlay={() => dispatch(selectIsPlaying(false))}
+          handlePause={() => dispatch(setCurrentTime(currentTime))}
         />
         <EventsList
           events={events}

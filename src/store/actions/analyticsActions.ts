@@ -51,3 +51,14 @@ export const fetchEventsSuccess = (events: FormattedEvent[]) => ({
   type: FETCH_EVENTS_SUCCESS as typeof FETCH_EVENTS_SUCCESS,
   payload: events,
 });
+export const updateActiveEvents = (
+  events: FormattedEvent[]
+): UpdateActiveEventsAction => ({
+  type: UPDATE_ACTIVE_EVENTS,
+  payload: events,
+});
+
+export const setCurrentTime = (time: number): SetCurrentTimeAction => ({
+  type: SET_CURRENT_TIME,
+  payload: time,
+});

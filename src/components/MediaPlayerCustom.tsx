@@ -11,6 +11,7 @@ import {
 } from "@vidstack/react/player/layouts/default";
 import { useEffect, useRef } from "react";
 import { FormattedEvent } from "../types/types";
+import style from "./MediaPlayer.module.css";
 
 interface MediaPlayerCustomProps {
   src: string;
@@ -18,8 +19,8 @@ interface MediaPlayerCustomProps {
   currentEvent: FormattedEvent | null;
   showRectangle: boolean;
   onTimeUpdate: (time: number) => void;
-  onPlayPause: () => void;
-  isPlaying: boolean;
+  handlePlay: () => void;
+  handlePause: () => void;
 }
 
 const MediaPlayerCustom: React.FC<MediaPlayerCustomProps> = ({
@@ -28,42 +29,50 @@ const MediaPlayerCustom: React.FC<MediaPlayerCustomProps> = ({
   currentEvent,
   showRectangle,
   onTimeUpdate,
-  onPlayPause,
-  isPlaying,
+  handlePlay,
+  handlePause,
 }) => {
   const playerRef = useRef<MediaPlayerInstance>(null);
   useEffect(() => {
     if (playerRef.current) {
       const player = playerRef.current;
-      player.addEventListener("timeupdate", () => {
+      const handleTimeUpdate = () => {
         onTimeUpdate(player.currentTime);
-      });
+      };
+
+      player.addEventListener("timeupdate", handleTimeUpdate);
 
       return () => {
-        player.removeEventListener("timeupdate", () => {
-          onTimeUpdate(player.currentTime);
-        });
+        player.removeEventListener("timeupdate", handleTimeUpdate);
       };
     }
   }, [onTimeUpdate]);
-
-  useEffect(() => {
-    if (playerRef.current) {
-      if (isPlaying) {
-        playerRef.current.play();
-      } else {
-        playerRef.current.pause();
-      }
-    }
-  }, [isPlaying]);
   return (
     <div>
-      <MediaPlayer ref={playerRef} src={src}>
+      <MediaPlayer
+        className={style.player}
+        ref={playerRef}
+        src={src}
+        onPlay={handlePlay}
+        onPause={handlePause}
+      >
         <MediaProvider />
-        <DefaultVideoLayout icons={defaultLayoutIcons} />
+        <DefaultVideoLayout
+          thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt"
+          icons={defaultLayoutIcons}
+        />
       </MediaPlayer>
-
-      {showRectangle && <div className="rectangle"></div>}
+      {showRectangle && (
+        <div
+          className={style.rectangle}
+          style={{
+            top: `${currentEvent?.zone.top}px`,
+            left: `${currentEvent?.zone.left}px`,
+            width: `${currentEvent?.zone.width}px`,
+            height: `${currentEvent?.zone.height}px`,
+          }}
+        ></div>
+      )}
     </div>
   );
 };
