@@ -4,8 +4,6 @@ import {
   FETCH_EVENTS_REQUEST,
   FETCH_EVENTS_SUCCESS,
   FETCH_EVENTS_FAILURE,
-  SET_CURRENT_TIME,
-  UPDATE_ACTIVE_EVENTS,
 } from "../constants";
 
 const initialState: AnalyticsState = {
@@ -38,16 +36,6 @@ const analyticsReducer = (
         ...state,
         loading: false,
         error: action.payload,
-      };
-    case SET_CURRENT_TIME:
-      return {
-        ...state,
-        currentTime: action.payload,
-      };
-    case UPDATE_ACTIVE_EVENTS:
-      return {
-        ...state,
-        activeEvents: action.payload,
       };
     default:
       return state;

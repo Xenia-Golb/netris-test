@@ -29,6 +29,8 @@ export interface PlayerState {
   isPlaying: boolean;
   currentEvent: FormattedEvent | null;
   showRectangle: boolean;
+  activeRectangles: FormattedEvent[];
+  activeEvents: FormattedEvent[];
 }
 
 export interface RootState {

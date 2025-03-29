@@ -10,9 +10,7 @@ import {
 } from "./store/selectors/analytics";
 import {
   selectCurrentTime,
-  selectIsPlaying,
-  selectCurrentEvent,
-  selectShowRectangle,
+  selectActiveEvents,
 } from "./store/selectors/player";
 import { setCurrentTime, setCurrentEvent } from "./store/actions/playerActions";
 import { FormattedEvent } from "./types/types";
@@ -26,8 +24,7 @@ const App: React.FC = () => {
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
   const currentTime = useSelector(selectCurrentTime);
-  const currentEvent = useSelector(selectCurrentEvent);
-  const showRectangle = useSelector(selectShowRectangle);
+  const activeEvents = useSelector(selectActiveEvents);
 
   useEffect(() => {
     dispatch(fetchEventsRequest());
@@ -57,11 +54,8 @@ const App: React.FC = () => {
         <MediaPlayerCustom
           src={VIDEO_URL}
           currentTime={currentTime}
-          currentEvent={currentEvent}
-          showRectangle={showRectangle}
+          activeEvents={activeEvents}
           onTimeUpdate={handleTimeUpdate}
-          handlePlay={() => dispatch(selectIsPlaying(false))}
-          handlePause={() => dispatch(setCurrentTime(currentTime))}
         />
         <EventsList
           events={events}

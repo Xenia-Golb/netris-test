@@ -1,11 +1,13 @@
 import React from "react";
 import { FormattedEvent } from "../types/types";
+import "./EventList.css";
 
 interface EventsListProps {
   events: FormattedEvent[];
   onEventClick: (event: FormattedEvent) => void;
   currentTime: number;
 }
+
 const EventsList: React.FC<EventsListProps> = ({
   events,
   onEventClick,

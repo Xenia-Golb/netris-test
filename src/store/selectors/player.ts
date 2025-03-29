@@ -6,3 +6,5 @@ export const selectCurrentEvent = (state: RootState) =>
   state.player.currentEvent;
 export const selectShowRectangle = (state: RootState) =>
   state.player.showRectangle;
+export const selectActiveEvents = (state: RootState) =>
+  state.player.activeEvents;

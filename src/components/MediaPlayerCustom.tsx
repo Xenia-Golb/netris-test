@@ -16,63 +16,50 @@ import style from "./MediaPlayer.module.css";
 interface MediaPlayerCustomProps {
   src: string;
   currentTime: number;
-  currentEvent: FormattedEvent | null;
-  showRectangle: boolean;
+  activeEvents: FormattedEvent[];
   onTimeUpdate: (time: number) => void;
-  handlePlay: () => void;
-  handlePause: () => void;
 }
 
 const MediaPlayerCustom: React.FC<MediaPlayerCustomProps> = ({
   src,
   currentTime,
-  currentEvent,
-  showRectangle,
+  activeEvents,
   onTimeUpdate,
-  handlePlay,
-  handlePause,
 }) => {
   const playerRef = useRef<MediaPlayerInstance>(null);
   useEffect(() => {
-    if (playerRef.current) {
-      const player = playerRef.current;
-      const handleTimeUpdate = () => {
-        onTimeUpdate(player.currentTime);
-      };
+    const player = playerRef.current;
+    if (!player) return;
 
-      player.addEventListener("timeupdate", handleTimeUpdate);
+    player.currentTime = currentTime;
 
-      return () => {
-        player.removeEventListener("timeupdate", handleTimeUpdate);
-      };
-    }
+    const handleTimeUpdate = () => onTimeUpdate(player.currentTime);
+    player.addEventListener("timeupdate", handleTimeUpdate);
+
+    return () => player.removeEventListener("timeupdate", handleTimeUpdate);
   }, [onTimeUpdate]);
+
   return (
     <div>
-      <MediaPlayer
-        className={style.player}
-        ref={playerRef}
-        src={src}
-        onPlay={handlePlay}
-        onPause={handlePause}
-      >
+      <MediaPlayer className={style.player} ref={playerRef} src={src}>
         <MediaProvider />
         <DefaultVideoLayout
           thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt"
           icons={defaultLayoutIcons}
         />
       </MediaPlayer>
-      {showRectangle && (
+      {activeEvents.map((event) => (
         <div
+          key={event.id}
           className={style.rectangle}
           style={{
-            top: `${currentEvent?.zone.top}px`,
-            left: `${currentEvent?.zone.left}px`,
-            width: `${currentEvent?.zone.width}px`,
-            height: `${currentEvent?.zone.height}px`,
+            top: `${event?.zone.top}px`,
+            left: `${event?.zone.left}px`,
+            width: `${event?.zone.width}px`,
+            height: `${event?.zone.height}px`,
           }}
         ></div>
-      )}
+      ))}
     </div>
   );
 };
