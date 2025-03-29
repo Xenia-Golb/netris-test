@@ -26,10 +26,7 @@ export interface AnalyticsState {
 
 export interface PlayerState {
   currentTime: number;
-  isPlaying: boolean;
   currentEvent: FormattedEvent | null;
-  showRectangle: boolean;
-  activeRectangles: FormattedEvent[];
   activeEvents: FormattedEvent[];
 }
 

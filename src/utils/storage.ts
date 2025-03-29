@@ -1,4 +1,4 @@
-import { FormattedEvent } from "./types/types";
+import { FormattedEvent } from "../types/types";
 
 export const saveEventsToLocalStorage = (events: FormattedEvent[]) => {
   localStorage.setItem("events", JSON.stringify(events));

@@ -9,7 +9,6 @@ export const setCurrentTime = (time: number) => ({
   type: SET_CURRENT_TIME,
   payload: time,
 });
-
 export const setCurrentEvent = (event: FormattedEvent | null) => ({
   type: SET_CURRENT_EVENT,
   payload: event,

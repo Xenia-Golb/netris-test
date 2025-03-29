@@ -8,10 +8,7 @@ import {
 
 const initialState: PlayerState = {
   currentTime: 0,
-  isPlaying: false,
   currentEvent: null,
-  showRectangle: false,
-  activeRectangles: [],
   activeEvents: [],
 };
 
@@ -24,7 +21,6 @@ const playerReducer = (
       return {
         ...state,
         currentTime: action.payload,
-        isPlaying: false,
       };
     case SET_CURRENT_EVENT:
       return {

@@ -1,6 +1,6 @@
 import React from "react";
 import { FormattedEvent } from "../types/types";
-import "./EventList.css";
+import style from "./EventList.module.css";
 
 interface EventsListProps {
   events: FormattedEvent[];
@@ -13,6 +13,12 @@ const EventsList: React.FC<EventsListProps> = ({
   onEventClick,
   currentTime,
 }) => {
+  const isEventActive = (event: FormattedEvent): boolean => {
+    return (
+      currentTime >= event.timestamp &&
+      currentTime < event.timestamp + event.duration
+    );
+  };
   return (
     <div className="events-list">
       <h3>Events</h3>
@@ -21,12 +27,7 @@ const EventsList: React.FC<EventsListProps> = ({
           <li
             key={event.id}
             onClick={() => onEventClick(event)}
-            className={
-              currentTime >= event.timestamp &&
-              currentTime <= event.timestamp + event.duration
-                ? "active"
-                : ""
-            }
+            className={isEventActive(event) ? style["active"] : ""}
           >
             {event.formattedTime}
           </li>

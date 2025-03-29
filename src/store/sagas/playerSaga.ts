@@ -19,8 +19,6 @@ function* handleTimeUpdateSaga(action: ReturnType<typeof setCurrentTime>) {
       );
     });
 
-    console.log("Active events:", activeEvents);
-
     yield put(setActiveEvents(activeEvents));
   } catch (error) {
     console.error("Error in handleTimeUpdateSaga:", error);

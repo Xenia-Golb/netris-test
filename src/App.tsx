@@ -15,6 +15,8 @@ import {
 import { setCurrentTime, setCurrentEvent } from "./store/actions/playerActions";
 import { FormattedEvent } from "./types/types";
 
+import "./App.css";
+
 const VIDEO_URL =
   "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 

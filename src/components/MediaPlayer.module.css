@@ -1,13 +1,11 @@
 .player {
     position: relative;
-    width: 1200px;
-    height: 800px;
+    width: 50vw;
+    height: 50vh;
 }
 
 .rectangle {
     position: absolute;
-    width: 100px;
-    height: 100px;
     pointer-events: none;
     background-color: green;
 }

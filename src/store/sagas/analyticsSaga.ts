@@ -10,7 +10,7 @@ import { formatTime } from "../../utils/formatTime";
 import {
   getEventsFromLocalStorage,
   saveEventsToLocalStorage,
-} from "../../storage";
+} from "../../utils/storage";
 
 // const EVENTS_API_URL = "https://jsonkeeper.com/b/7T9N";
 

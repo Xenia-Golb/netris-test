@@ -1,14 +1,3 @@
-import "@vidstack/react/player/styles/default/theme.css";
-import "@vidstack/react/player/styles/default/layouts/video.css";
-import {
-  MediaPlayer,
-  MediaPlayerInstance,
-  MediaProvider,
-} from "@vidstack/react";
-import {
-  DefaultVideoLayout,
-  defaultLayoutIcons,
-} from "@vidstack/react/player/layouts/default";
 import { useEffect, useRef } from "react";
 import { FormattedEvent } from "../types/types";
 import style from "./MediaPlayer.module.css";
@@ -26,39 +15,46 @@ const MediaPlayerCustom: React.FC<MediaPlayerCustomProps> = ({
   activeEvents,
   onTimeUpdate,
 }) => {
-  const playerRef = useRef<MediaPlayerInstance>(null);
+  const playerRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const player = playerRef.current;
+    if (!player) return;
+    if (Math.abs(player.currentTime - currentTime) > 0.2) {
+      player.currentTime = currentTime;
+    }
+  }, [currentTime]);
+
   useEffect(() => {
     const player = playerRef.current;
     if (!player) return;
 
-    player.currentTime = currentTime;
+    const handleTimeUpdate = () => {
+      if (player.currentTime !== undefined) {
+        onTimeUpdate(player.currentTime);
+      }
+    };
 
-    const handleTimeUpdate = () => onTimeUpdate(player.currentTime);
     player.addEventListener("timeupdate", handleTimeUpdate);
-
-    return () => player.removeEventListener("timeupdate", handleTimeUpdate);
+    return () => {
+      player.removeEventListener("timeupdate", handleTimeUpdate);
+    };
   }, [onTimeUpdate]);
 
   return (
-    <div>
-      <MediaPlayer className={style.player} ref={playerRef} src={src}>
-        <MediaProvider />
-        <DefaultVideoLayout
-          thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt"
-          icons={defaultLayoutIcons}
-        />
-      </MediaPlayer>
+    <div className={style.container}>
+      <video className={style.player} ref={playerRef} src={src} controls />
       {activeEvents.map((event) => (
         <div
           key={event.id}
           className={style.rectangle}
           style={{
-            top: `${event?.zone.top}px`,
-            left: `${event?.zone.left}px`,
-            width: `${event?.zone.width}px`,
-            height: `${event?.zone.height}px`,
+            top: `${event.zone?.top ?? 0}px`,
+            left: `${event.zone?.left ?? 0}px`,
+            width: `${event.zone?.width ?? 0}px`,
+            height: `${event.zone?.height ?? 0}px`,
           }}
-        ></div>
+        />
       ))}
     </div>
   );
