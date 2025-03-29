@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { FormattedEvent } from "../types/types";
+import React, { useEffect, useRef } from "react";
+import { FormattedEvent } from "../../types/types";
 import style from "./MediaPlayer.module.css";
 
 interface MediaPlayerCustomProps {
@@ -9,7 +9,7 @@ interface MediaPlayerCustomProps {
   onTimeUpdate: (time: number) => void;
 }
 
-const MediaPlayerCustom: React.FC<MediaPlayerCustomProps> = ({
+export const MediaPlayerCustom: React.FC<MediaPlayerCustomProps> = ({
   src,
   currentTime,
   activeEvents,
@@ -43,10 +43,17 @@ const MediaPlayerCustom: React.FC<MediaPlayerCustomProps> = ({
 
   return (
     <div className={style.container}>
-      <video className={style.player} ref={playerRef} src={src} controls />
+      <video
+        className={style.player}
+        ref={playerRef}
+        src={src}
+        controls
+        data-testid="video-player"
+      />
       {activeEvents.map((event) => (
         <div
           key={event.id}
+          data-testid={`event-marker-${event.id}`}
           className={style.rectangle}
           style={{
             top: `${event.zone?.top ?? 0}px`,
@@ -59,5 +66,3 @@ const MediaPlayerCustom: React.FC<MediaPlayerCustomProps> = ({
     </div>
   );
 };
-
-export default MediaPlayerCustom;

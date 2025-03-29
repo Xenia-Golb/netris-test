@@ -1,5 +1,5 @@
 import React from "react";
-import { FormattedEvent } from "../types/types";
+import { FormattedEvent } from "../../types/types";
 import style from "./EventList.module.css";
 
 interface EventsListProps {
@@ -8,7 +8,7 @@ interface EventsListProps {
   currentTime: number;
 }
 
-const EventsList: React.FC<EventsListProps> = ({
+export const EventsList: React.FC<EventsListProps> = ({
   events,
   onEventClick,
   currentTime,
@@ -36,5 +36,3 @@ const EventsList: React.FC<EventsListProps> = ({
     </div>
   );
 };
-
-export default EventsList;

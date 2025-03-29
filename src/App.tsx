@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import MediaPlayerCustom from "./components/MediaPlayerCustom";
-import EventsList from "./components/EventsList";
+import { EventsList, MediaPlayerCustom } from "./components";
 import { fetchEventsRequest } from "./store/actions/analyticsActions";
 import {
   selectEvents,
